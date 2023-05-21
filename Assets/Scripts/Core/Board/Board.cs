@@ -7,7 +7,7 @@ public class Board : MonoBehaviour
     [SerializeField] private int _width;
     [SerializeField] private int _height;
 
-    [SerializeField] private BaseBlock _baseBlock;
+    [SerializeField] private List<BaseBlock> _baseBlocks;
 
 
     private BaseBlock[,] _blocks;
@@ -22,13 +22,13 @@ public class Board : MonoBehaviour
     }
 
     private void PlaceBlock()
-    {
+    { 
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
-                BaseBlock block = Instantiate(_baseBlock, GetWorldPosition(x, y), Quaternion.identity, transform);
-                block.Initialize(_scaleBlock);
+                BaseBlock block = Instantiate(_baseBlocks[Random.Range(0, _baseBlocks.Count)], GetWorldPosition(x, y), Quaternion.identity, transform);
+                block.Initialize(_scaleBlock, y * 10 + x, x, y);
 
                 _blocks[y, x] = block;
             }
@@ -42,6 +42,18 @@ public class Board : MonoBehaviour
 
     public void Clear()
     {
-
+        if(_blocks != null)
+        {
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    if(_blocks[y,x] != null)
+                    {
+                        Destroy(_blocks[y,x].gameObject);
+                    }
+                }
+            }
+        }
     }
 }
