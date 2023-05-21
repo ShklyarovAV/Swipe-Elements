@@ -13,21 +13,30 @@ public class Board : MonoBehaviour
     private BaseBlock[,] _blocks;
     private float _scaleBlock;
 
-    public void Initialize()
+    public void Initialize(LevelData levelData)
     {
+        _width = levelData.GetWigthBoard;
+        _height = levelData.GetHeightBoard;
+
         _blocks = new BaseBlock[_height, _width];
         _scaleBlock = 2f;
 
-        PlaceBlock();
+        PlaceBlock(levelData.GetBlockTypesDatas);
     }
 
-    private void PlaceBlock()
+    private void PlaceBlock(List<BlockTypesData> blockTypes)
     { 
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
-                BaseBlock block = Instantiate(_baseBlocks[Random.Range(0, _baseBlocks.Count)], GetWorldPosition(x, y), Quaternion.identity, transform);
+                int index = _baseBlocks.FindIndex((d) => d.GetBlockType == blockTypes[x].BlockTypes[y]);
+                if(index == -1)
+                {
+                    continue;
+                }
+
+                BaseBlock block = Instantiate(_baseBlocks[index], GetWorldPosition(x, y), Quaternion.identity, transform);
                 block.Initialize(_scaleBlock, y * 10 + x, x, y);
 
                 _blocks[y, x] = block;

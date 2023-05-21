@@ -153,3 +153,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 73678880120518713}
   sprite: {fileID: 6409410078049661707}
+  _blockType: 1
